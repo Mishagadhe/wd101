@@ -1,39 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-   <title>Registration Form</title>
-</head>
-<body>
-   <h1>WD101 Registration Form</h1>
-   <form id="registrationForm">
-      <label for="fullName">Full Name:</label>
-      <input type="text" id="fullName" name="fullName" required><br><br>
-
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required><br><br>
-
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required><br><br>
-
-      <button type="button" id="registerButton">Register</button>
-   </form>
-
-   <script>
-      document.addEventListener("DOMContentLoaded", function () {
-         const registerButton = document.getElementById("registerButton");
-         registerButton.addEventListener("click", function () {
-            const fullName = document.getElementById("fullName").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (fullName && email && password) {
-               // You can perform further actions here, like sending the data to a server
-               console.log("Registration successful!");
-            } else {
-               console.log("Please fill in all fields.");
-            }
-         });
-      });
-   </script>
-</body>
-</html>
+let user_det=document.getElementById("UserDetails");
+const retent=()=> {
+    let ent= localStorage.getItem("User-details");
+    if(ent){
+        ent=JSON.parse(ent);
+    }
+    else{
+        ent=[];
+    }
+    return ent;
+}
+let userDet=retent();
+const dispent=()=> {
+    const ent=retent();
+    let tableEntries = '';
+    for (const entry of ent) {
+        const nameCell = `<td>${entry.name}</td>`;
+        const emailCell = `<td>${entry.email}</td>`;
+        const passwordCell = `<td>${entry.password}</td>`;
+        const dobCell = `<td>${entry.dob}</td>`;
+        const acceptTermsCell = `<td>${entry.acceptTerms ? 'true' : 'false'}</td>`;
+      
+        const row = `<tr>${nameCell}${emailCell}${passwordCell}${dobCell}${acceptTermsCell}</tr>`;
+        tableEntries += row;
+      }
+    const table = `<table><tr><th>Name</th><th>Email</th><th>Password</th><th>Dob</th><th>Accepted terms?</th></tr>${tableEntries}</table>`;
+    let details= document.getElementById("User-details");
+    details.innerHTML=table;
+} 
+const SaveDet=(event)=>{
+    event.preventDefault();
+    const name=document.getElementById("name").value;
+    const email=document.getElementById("email").value;
+    const password=document.getElementById("password").value;
+    const dob=document.getElementById("dob").value;
+    const acceptTerms=document.getElementById("acceptTerms").value;
+const entry={
+    name,
+    email,
+    password,
+    dob,
+    acceptTerms
+};
+userDet.push(entry);
+localStorage.setItem("User-details",JSON.stringify(userDet));
+dispent();
+}
+user_det.addEventListener("submit",SaveDet);
+dispent();
